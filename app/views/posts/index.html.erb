@@ -1,7 +1,101 @@
-<h1>Posts#index</h1>
-<p>Find me in app/views/posts/index.html.erb</p>
-<p class="text-gray-900 transition hover:text-gray-500/75  dark:hover:text-white/75">
-              <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete } %>
-            </p>
+<%= render "layouts/header" %>
+<% if @posts.present? %>
+<% @posts.each do |post| %> 
 
-            <%= link_to "create post", new_post_path %>
+
+         
+
+
+    <div class="bg-white dark:bg-black mt-2 rounded-lg shadow-sm max-w-md w-96 mx-auto insta-border">
+
+        <!-- Post Header -->
+        <div class="flex items-center justify-between p-3 border-b insta-border">
+            <div class="flex items-center space-x-3">
+                
+                <span class="text-sm font-semibold text-gray-900 dark:text-gray-100"><%=post.user.email %></span>
+            </div>
+            
+        </div>
+
+        <!-- Post Image -->
+        <div>
+       <% if post.image.attached? %>
+     <%= image_tag post.image.representation(resize_to_limit:[600,600]) ,class:"h-56 w-full rounded-md object-cover" %>   
+    <% end %>
+        </div>
+
+        <!-- Post Actions -->
+        <div class="flex justify-between items-center p-4">
+            <div class="flex space-x-4">
+
+                    <% existing_like = current_user.likes.find_by(likeable: post) %>
+
+                    <%= form_with(
+                         model: existing_like || Like.new, 
+                         url: existing_like ? like_path(existing_like) : likes_path, 
+                        method: existing_like ? :delete : :post
+                        ) do |f| %>
+
+                <button aria-label="Like post" class="text-gray-900 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-400">
+                    <svg class="w-6 h-6"<% if current_user.likes.where(likeable: post).exists? %>  fill="red" <%else%> fill="none" <%end %>stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    <%= f.hidden_field :post_id , value: post.id %>
+                    <%= f.submit existing_like ? "dislike" : "Like" %>
+                    <%end %>
+
+                </button>
+                <button aria-label="Comment on post" class="text-gray-900 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path xmlns="http://www.w3.org/2000/svg" d="M8.2881437,19.1950792 C8.38869181,19.1783212 8.49195996,19.1926955 8.58410926,19.2362761 C9.64260561,19.7368747 10.8021412,20 12,20 C16.418278,20 20,16.418278 20,12 C20,7.581722 16.418278,4 12,4 C7.581722,4 4,7.581722 4,12 C4,13.7069096 4.53528582,15.3318588 5.51454846,16.6849571 C5.62010923,16.830816 5.63909672,17.022166 5.5642591,17.1859256 L4.34581002,19.8521348 L8.2881437,19.1950792 Z M3.58219949,20.993197 C3.18698783,21.0590656 2.87870208,20.6565881 3.04523765,20.2921751 L4.53592782,17.0302482 C3.54143337,15.5576047 3,13.818993 3,12 C3,7.02943725 7.02943725,3 12,3 C16.9705627,3 21,7.02943725 21,12 C21,16.9705627 16.9705627,21 12,21 C10.707529,21 9.4528641,20.727055 8.30053434,20.2068078 L3.58219949,20.993197 Z"/></svg>
+                </button>
+               
+            </div>
+            <button aria-label="Save post" class="text-gray-900 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+            </button>
+        </div>
+
+        <!-- Likes Count -->
+        <div class="px-4 pb-2">
+            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                <%= post.likes.count %> likes
+            </p>
+        </div>
+
+        <!-- Caption -->
+        <div class="px-4 pb-2">
+            <p class="text-sm text-gray-900 dark:text-gray-100">
+                <a href="#" class="font-semibold hover:underline"><%= post.user.email %></a>
+                <%= post.caption %>
+            </p>
+        </div>
+
+        <div class="text-gray-100 px-4 pb-2 text-lg">Comments</div>
+        <div id="comments-container"  class="text-sm px-4 pb-2 text-gray-500 dark:text-gray-400" style="max-height: 150px; overflow-y: auto;">
+      
+
+<% @comments = post.comments    %>
+
+  <div id="comments-list">
+    <%= render partial: "layouts/comment", collection: @comments %>
+  </div>
+</div>
+
+
+        <!-- Add Comment -->
+        <div class="px-4 pb-4 border-t insta-border mt-2 pt-3 flex my-2">
+            <div class="flex items-center space-x-3">
+                <img class="w-7 h-7 rounded-full object-cover"
+                     src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=80&q=80"
+                     alt="Your Avatar">
+                     <%= form_with(model: Comment.new , builder: CustomFormBuilder) do |f| %>
+                     <%= f.text_field :content , required: true,class:"w-24"%>
+                     <%= f.hidden_field :post_id , value: post.id %>
+
+              
+            </div>
+             <button  type ="submit" class="flex w-24 justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"> <%= f.submit "comment" %></button><%end %>
+        </div>
+
+    </div>
+
+    <%end %>
+    <%end %>

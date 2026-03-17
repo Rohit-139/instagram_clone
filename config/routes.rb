@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get "comments/create"
+  get "comments/destroy"
+  get "likes/create"
+  get "likes/destroy"
 
 
   devise_for :users , controllers: {
@@ -7,6 +11,9 @@ Rails.application.routes.draw do
 }
 
   resources :posts 
+  resources :likes , only: [:create,:destroy]
+  resources :comments, only: [:create, :destroy]
+  # post "create/:id", to: "likes#create", as: :likes
   # devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

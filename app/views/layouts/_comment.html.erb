@@ -1,0 +1,36 @@
+<div class="flex justify-between">
+	<div class="text-gray-100"><%=comment.user.email%> : <%=comment.content%></div>
+
+	<div class="flex space-x-4">
+
+                    <% existing_like = current_user.likes.find_by(likeable: comment) %>
+
+                    <%= form_with(
+                         model: existing_like || Like.new, 
+                         url: existing_like ? like_path(existing_like) : likes_path, 
+                        method: existing_like ? :delete : :post
+                        ) do |f| %>
+
+                <button aria-label="Like post" class="text-gray-900 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-400">
+                    <svg class="w-4 h-4"<% if current_user.likes.where(likeable: comment).exists? %>  fill="red" <%else%> fill="none" <%end %>stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    <%= f.hidden_field :comment_id , value: comment.id %>
+                    <%= f.submit existing_like ? "dislike" : "Like" %>
+                    <%end %>
+
+                </button>
+
+                
+ <button class="text-gray-900 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-400">
+             <%= form_with(model: comment, url: comment_path(comment), method: :delete) do |f|%>
+  <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 20px; height: 20px;">
+
+    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m-1.022.165a48.11 48.11 0 02-3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+  </svg>
+  <%= f.submit "delete" %>
+  <%end %>
+ </button>
+
+
+            </div>
+
+</div>
