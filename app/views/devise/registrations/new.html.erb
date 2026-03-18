@@ -8,10 +8,6 @@
 <%= form_with(model: resource, scope: resource_name, url: registration_path(resource_name), builder: CustomFormBuilder) do |f| %>
   
 
-    <div class="space-y-6">
-    <label class=" text-lg font-medium text-gray-100"><%= f.label :name %></label>
-    <p><%= f.text_field :name, autofocus: true, autocomplete: "name" , required: true %></p>
-  </div>
 
   <div class="space-y-6 mt-4">
     <label class="text-lg font-medium text-gray-100"><%= f.label :email %> Address</label>
@@ -31,10 +27,6 @@
     <p><%= f.password_field :password_confirmation, autocomplete: "new-password", required: true %></p>
   </div>
 
-  <div class="space-y-6 mt-4">
- <label class="text-lg font-medium text-gray-100"><%= f.label :type, "For Admin" %></label> 
-  <span class="px-4"><%= f.checkbox :type %> </span> 
-</div>
 
 
 

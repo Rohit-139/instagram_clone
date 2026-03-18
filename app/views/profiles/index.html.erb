@@ -1,0 +1,30 @@
+<%= render "layouts/header" %>
+
+<div class="w-96 bg-gray-200 mx-auto mt-2 p-2">
+        <div class="w-24 mx-auto text-2xl">Followers</div>
+        <% if @followers.present? %>
+         <% @followers.each do |follower| %>
+    <div class="p-3 flex items-center justify-between border-t cursor-pointer hover:bg-gray-200">
+       
+        <div class="flex items-center">
+            <% if follower.profile.avatar.attached? %>
+            <%= image_tag follower.profile.avatar.representation(resize_to_limit:[100,100]), class:"rounded-full h-10 w-10" %>
+            <%else %>
+            <%= image_tag "download.jpeg", class:"rounded-full h-10 w-10" %>
+            <% end %>
+            <div class="ml-2 flex flex-col">
+                <div class="leading-snug text-sm text-gray-900 font-bold"><%= follower.email %></div>
+                <div class="leading-snug text-xs text-gray-600"><%= "@#{follower.email.split('@').first}" %></div>
+            </div>
+        </div>
+        <button class="h-8 px-3 text-md font-bold text-blue-400 border border-blue-400 rounded-full hover:bg-blue-100">
+            <% if current_user.followees.include?(follower)%>
+        <%= link_to "Unfollow", unfollow_path(follower), data: {turbo_method: :post} %>
+        <% else %>
+        <%= link_to "Follow", follow_path(follower), data: { turbo_method: :post } %>
+        <%end %>
+        </button>
+    </div>
+    <% end %>
+    <% end %>
+</div>

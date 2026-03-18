@@ -1,0 +1,74 @@
+<%= render "layouts/header" %>
+
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  
+
+<h1 class="text-2xl mx-auto w-72 text-gray-100 p-2">Edit profile</h1>
+  <div class=" sm:mx-auto sm:w-full sm:max-w-sm">
+
+
+<%= form_with(model:@profile , builder: CustomFormBuilder )  do |form| %>
+  
+
+  <div class="space-y-6">
+    <label class=" text-lg font-medium text-gray-100"><%= form.label :name%> </label>
+  	<div class="mt-2">
+      <%= form.text_field :name, autofocus: true, autocomplete: "name" , required: true%>
+    </div>
+  </div>
+
+
+
+  <div class="space-y-6">
+    <label class=" text-lg font-medium text-gray-100"><%= form.label :bio%> </label>
+    <div class="mt-2">
+      <%= form.text_field :bio, autofocus: true, autocomplete: "bio" , required: true%>
+    </div>
+  </div>
+
+
+
+  <div class="space-y-6">
+    <label class=" text-lg font-medium text-gray-100"><%= form.label :about%> </label>
+    <div class="mt-2">
+      <%= form.text_field :about, autofocus: true, autocomplete: "name" , required: true%>
+    </div>
+  </div>
+
+
+    <div class="space-y-6 mt-2">
+      <div>
+    <label class="text-lg font-medium text-gray-100"> <%= form.label :avatar %> </label>
+    <% if @profile.avatar.attached? && @profile.persisted? %>
+    <%= image_tag @profile.avatar.representation(resize_to_limit: [200,200])%>
+    <p class="text-gray-100">want to change image ?</p>
+    <%= form.file_field :avatar %>
+    <% else %>
+    <%= form.file_field :avatar, required: true %>
+    <% end %>
+    </div>
+
+
+  	
+  </div>
+
+  <% if @profile.errors.any? %>
+    <div class="text-red-700">
+      <h2><%= pluralize(@profile.errors.count, "error") %> prohibited this event from being saved:</h2>
+
+      <ul>
+        <% post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mt-6">
+    <button  type ="submit" class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"> <%= form.submit %></button>
+  </div>
+
+
+  <%end %>
+</div>
+</div>

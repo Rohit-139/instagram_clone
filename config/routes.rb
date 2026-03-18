@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   resources :posts 
   resources :likes , only: [:create,:destroy]
   resources :comments, only: [:create, :destroy]
+  resources :profiles  
+    post "follow/:id", to:"profiles#follow" , as: :follow
+    post "unfollow/:id", to:"profiles#unfollow", as: :unfollow
   # post "create/:id", to: "likes#create", as: :likes
   # devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
