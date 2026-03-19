@@ -18,10 +18,20 @@
         <p class="text-lg font-bold text-gray-900 truncate"><%= @profile.name %></p>
         <p class="text-sm text-gray-500 truncate"><%= @profile.bio %></p>
         <div class="flex space-x-4 mt-2">
-          <span class="text-sm font-medium text-gray-900"><%= @profile.user.posts.count %><span class="font-normal text-gray-500"> posts</span></span>
+         <div class="flex space-x-4 mt-2"> <span class="text-sm font-medium text-gray-900"><%= @profile.user.posts.count %><span class="font-normal text-gray-500"> posts</span></span>
           <span class="text-sm font-medium text-gray-900">
             <%=link_to " #{@profile.user.followers.count}", profiles_path(follower: true, user: @profile.user) %> <span class="font-normal text-gray-500">followers</span></span>
           <span class="text-sm font-medium text-gray-900"><%=link_to " #{@profile.user.followees.count}", profiles_path(follower: false, user: @profile.user) %>  <span class="font-normal text-gray-500">following</span></span>
+          </div>
+
+          <% if (@profile.user == current_user) %>
+          <div class="px-8 flex gap-2">
+            <button  type ="submit" class="flex w-36 mx-auto justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"> <%= link_to "Edit Posts" , post_page_path %></button>
+             <button  type ="submit" class="flex w-36 mx-auto justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"> <%= link_to "delete postss" , post_page_path %></button>
+
+
+          </div>
+          <% end %>
         </div>
       </div>
     </div>
@@ -74,8 +84,9 @@
     
     </div>
 
-
+    <% if (@profile.user == current_user) %>
     <div class="mt-6 p-2">
     <button  type ="submit" class="flex w-72 mx-auto justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"> <%= link_to "Edit Profile" , edit_profile_path(@profile) %></button>
   </div>
+  <% end %>
   </div>

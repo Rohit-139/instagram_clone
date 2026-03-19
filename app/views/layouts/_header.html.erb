@@ -19,6 +19,12 @@
             </p>
           </li>
 
+          <li>
+            <p class="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75">
+              <%= link_to "Edit post", post_page_path %>
+            </p>
+          </li>
+
            <li>
             <p class="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75">
               <%= link_to "Profile ", profile_path(current_user.profile.id) %>

@@ -2,17 +2,17 @@ class LikesController < ApplicationController
   def create
     @likeable = find_likeable
     @like = @likeable.likes.new(user: current_user)
-    
+
     if @like.save
       redirect_to posts_path
     else
-      redirect_to posts_path, alert: 'Unable to like.'
+      redirect_to posts_path, alert: "Unable to like."
     end
   end
 
   def destroy
     @like = Like.find(params[:id])
-    @like.destroy 
+    @like.destroy
     redirect_to posts_path
   end
 

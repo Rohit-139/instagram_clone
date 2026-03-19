@@ -1,34 +1,48 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: [:edit, :update, :destroy]
+  before_action :set_post, only: [ :edit, :update, :destroy ]
 
   def index
     @posts = Post.where.not(user: current_user)
   end
 
-  def new 
+  def new
     @post = Post.new
   end
 
-  def create 
+  def create
     @post = Post.new(post_params)
     @post.user = current_user
-    @post.save 
+     if @post.save
+       redirect_to posts_path
+     else
+      render :new, status: :unprocessable_entity
+     end
   end
 
-  def edit 
+  def edit
   end
 
-  def update 
-    @post.update(post_params)
+  def update
+   if @post.update(post_params)
+      redirect_to post_page_path
+   else
+      render :edit, status: :unprocessable_entity
+   end
   end
 
-  def destroy 
+  def destroy
     @post.destroy
+    redirect_to post_page_path
   end
 
 
-  private 
+  def post_page
+    @posts = current_user.posts
+  end
+
+
+  private
   def post_params
     params.require(:post).permit(:caption, :image)
   end

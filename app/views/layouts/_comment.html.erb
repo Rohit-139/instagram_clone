@@ -1,5 +1,5 @@
 <div class="flex justify-between">
-	<div class="text-gray-100"><%=comment.user.email%> : <%=comment.content%></div>
+	<div class="text-gray-100"><%= link_to "#{comment.user.email}" , profile_path(comment.user.profile) %> : <%=comment.content%></div>
 
 	<div class="flex space-x-4">
 

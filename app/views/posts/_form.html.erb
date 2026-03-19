@@ -20,8 +20,15 @@
     <div class="space-y-6 mt-2">
     	<div>
   	<label class="text-lg font-medium text-gray-100"> <%= form.label :image %> </label>
+    <% if post.image.attached? && post.persisted? %>
+    <%= image_tag post.image.representation(resize_to_limit: [200,200])%>
+    <p class="text-gray-100">want to change image ?</p>
+    <%= form.file_field :image %>
+    <% else %>
+    <%= form.file_field :image, required: true %>
+    <% end %>
   	
-  	<%= form.file_field :image, required: true %>
+  	
   	</div>
   	
   </div>
