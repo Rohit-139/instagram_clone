@@ -70,4 +70,4 @@ gem "devise", "~> 5.0"
 
 gem "tailwindcss-rails", "~> 4.4"
 
-gem "rails_icons", "~> 1.7"
+gem "rails_icons", "~> 1.8"
